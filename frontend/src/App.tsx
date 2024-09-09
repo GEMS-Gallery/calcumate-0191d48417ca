@@ -26,30 +26,40 @@ const App: React.FC = () => {
   const [showEmails, setShowEmails] = useState(false);
   const [showProposals, setShowProposals] = useState(false);
   const [showAppointments, setShowAppointments] = useState(false);
-  const [metrics, setMetrics] = useState({
-    newLeads: 0,
-    emails: 0,
-    proposals: 0,
-    appointments: 0,
-  });
+  const [metrics, setMetrics] = useState<{
+    newLeads: number | null;
+    emails: number | null;
+    proposals: number | null;
+    appointments: number | null;
+  }>({ newLeads: null, emails: null, proposals: null, appointments: null });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const countryResult = await backend.getCountryData();
-      const emailResult = await backend.getEmailData();
-      const metricsResult = await backend.getMetrics();
+      try {
+        setLoading(true);
+        const [countryResult, emailResult, metricsResult] = await Promise.all([
+          backend.getCountryData(),
+          backend.getEmailData(),
+          backend.getMetrics()
+        ]);
 
-      setCountryData({
-        labels: countryResult.map(([label, _]) => label),
-        data: countryResult.map(([_, value]) => Number(value)),
-      });
+        setCountryData({
+          labels: countryResult.map(([label, _]) => label),
+          data: countryResult.map(([_, value]) => Number(value)),
+        });
 
-      setEmailData({
-        labels: emailResult.map(([label, _]) => label),
-        data: emailResult.map(([_, value]) => Number(value)),
-      });
+        setEmailData({
+          labels: emailResult.map(([label, _]) => label),
+          data: emailResult.map(([_, value]) => Number(value)),
+        });
 
-      setMetrics(metricsResult);
+        setMetrics(metricsResult);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
@@ -90,6 +100,7 @@ const App: React.FC = () => {
           <Grid item xs={12}>
             <KeyMetrics 
               metrics={metrics}
+              loading={loading}
               onNewLeadsClick={handleNewLeadsClick} 
               onEmailsClick={handleEmailsClick} 
               onProposalsClick={handleProposalsClick}

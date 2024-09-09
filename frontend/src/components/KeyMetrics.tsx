@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const MetricPaper = styled(Paper)(({ theme }) => ({
@@ -11,18 +11,19 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
 
 interface KeyMetricsProps {
   metrics: {
-    newLeads: number;
-    emails: number;
-    proposals: number;
-    appointments: number;
+    newLeads: number | null;
+    emails: number | null;
+    proposals: number | null;
+    appointments: number | null;
   };
+  loading: boolean;
   onNewLeadsClick: () => void;
   onEmailsClick: () => void;
   onProposalsClick: () => void;
   onAppointmentsClick: () => void;
 }
 
-const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, loading, onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -30,25 +31,41 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, onNewLeadsClick, onEma
       </Grid>
       <Grid item xs={6} sm={3}>
         <MetricPaper onClick={onNewLeadsClick}>
-          <Typography variant="h4" color="primary">{metrics.newLeads}</Typography>
+          {loading ? (
+            <Skeleton variant="text" width="100%" height={60} />
+          ) : (
+            <Typography variant="h4" color="primary">{metrics.newLeads}</Typography>
+          )}
           <Typography variant="body2">New Leads</Typography>
         </MetricPaper>
       </Grid>
       <Grid item xs={6} sm={3}>
         <MetricPaper onClick={onEmailsClick}>
-          <Typography variant="h4" color="primary">{metrics.emails}</Typography>
+          {loading ? (
+            <Skeleton variant="text" width="100%" height={60} />
+          ) : (
+            <Typography variant="h4" color="primary">{metrics.emails}</Typography>
+          )}
           <Typography variant="body2">Emails</Typography>
         </MetricPaper>
       </Grid>
       <Grid item xs={6} sm={3}>
         <MetricPaper onClick={onProposalsClick}>
-          <Typography variant="h4" color="primary">{metrics.proposals}</Typography>
+          {loading ? (
+            <Skeleton variant="text" width="100%" height={60} />
+          ) : (
+            <Typography variant="h4" color="primary">{metrics.proposals}</Typography>
+          )}
           <Typography variant="body2">Proposals</Typography>
         </MetricPaper>
       </Grid>
       <Grid item xs={6} sm={3}>
         <MetricPaper onClick={onAppointmentsClick}>
-          <Typography variant="h4" color="primary">{metrics.appointments}</Typography>
+          {loading ? (
+            <Skeleton variant="text" width="100%" height={60} />
+          ) : (
+            <Typography variant="h4" color="primary">{metrics.appointments}</Typography>
+          )}
           <Typography variant="body2">Appointments</Typography>
         </MetricPaper>
       </Grid>
