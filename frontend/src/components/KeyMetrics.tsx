@@ -14,9 +14,10 @@ interface KeyMetricsProps {
   onNewLeadsClick: () => void;
   onEmailsClick: () => void;
   onProposalsClick: () => void;
+  onAppointmentsClick: () => void;
 }
 
-const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick, onEmailsClick, onProposalsClick }) => {
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
   const [metrics, setMetrics] = useState({
     newLeads: 0,
     emails: 0,
@@ -57,7 +58,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick, onEmailsClick,
         </MetricPaper>
       </Grid>
       <Grid item xs={6} sm={3}>
-        <MetricPaper>
+        <MetricPaper onClick={onAppointmentsClick}>
           <Typography variant="h4" color="primary">{metrics.appointments}</Typography>
           <Typography variant="body2">Appointments</Typography>
         </MetricPaper>

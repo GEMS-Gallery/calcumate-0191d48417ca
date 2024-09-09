@@ -1,4 +1,10 @@
 export const idlFactory = ({ IDL }) => {
+  const Appointment = IDL.Record({
+    'clientName' : IDL.Text,
+    'date' : IDL.Text,
+    'time' : IDL.Text,
+    'purpose' : IDL.Text,
+  });
   const Email = IDL.Record({
     'status' : IDL.Text,
     'sentTime' : IDL.Text,
@@ -25,6 +31,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
+    'getAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
     'getCountryData' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Float64))],

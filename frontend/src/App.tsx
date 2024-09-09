@@ -7,6 +7,7 @@ import KeyMetrics from './components/KeyMetrics';
 import LeadsTable from './components/LeadsTable';
 import EmailsTable from './components/EmailsTable';
 import ProposalsTable from './components/ProposalsTable';
+import AppointmentsTable from './components/AppointmentsTable';
 
 const DashboardPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -24,6 +25,7 @@ const App: React.FC = () => {
   const [showOnlyNewLeads, setShowOnlyNewLeads] = useState(false);
   const [showEmails, setShowEmails] = useState(false);
   const [showProposals, setShowProposals] = useState(false);
+  const [showAppointments, setShowAppointments] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,18 +50,28 @@ const App: React.FC = () => {
     setShowOnlyNewLeads(!showOnlyNewLeads);
     setShowEmails(false);
     setShowProposals(false);
+    setShowAppointments(false);
   };
 
   const handleEmailsClick = () => {
     setShowEmails(!showEmails);
     setShowOnlyNewLeads(false);
     setShowProposals(false);
+    setShowAppointments(false);
   };
 
   const handleProposalsClick = () => {
     setShowProposals(!showProposals);
     setShowOnlyNewLeads(false);
     setShowEmails(false);
+    setShowAppointments(false);
+  };
+
+  const handleAppointmentsClick = () => {
+    setShowAppointments(!showAppointments);
+    setShowOnlyNewLeads(false);
+    setShowEmails(false);
+    setShowProposals(false);
   };
 
   return (
@@ -71,6 +83,7 @@ const App: React.FC = () => {
               onNewLeadsClick={handleNewLeadsClick} 
               onEmailsClick={handleEmailsClick} 
               onProposalsClick={handleProposalsClick}
+              onAppointmentsClick={handleAppointmentsClick}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -124,6 +137,8 @@ const App: React.FC = () => {
               <EmailsTable />
             ) : showProposals ? (
               <ProposalsTable />
+            ) : showAppointments ? (
+              <AppointmentsTable />
             ) : (
               <LeadsTable showOnlyNewLeads={showOnlyNewLeads} />
             )}

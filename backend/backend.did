@@ -21,8 +21,16 @@ type Email =
    status: text;
    subject: text;
  };
+type Appointment = 
+ record {
+   clientName: text;
+   date: text;
+   purpose: text;
+   time: text;
+ };
 service : {
   addLead: (text, text, text, text, text) -> ();
+  getAppointments: () -> (vec Appointment) query;
   getCountryData: () -> (vec record {
                                text;
                                float64;
