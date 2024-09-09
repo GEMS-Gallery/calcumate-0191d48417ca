@@ -26,11 +26,18 @@ const App: React.FC = () => {
   const [showEmails, setShowEmails] = useState(false);
   const [showProposals, setShowProposals] = useState(false);
   const [showAppointments, setShowAppointments] = useState(false);
+  const [metrics, setMetrics] = useState({
+    newLeads: 0,
+    emails: 0,
+    proposals: 0,
+    appointments: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       const countryResult = await backend.getCountryData();
       const emailResult = await backend.getEmailData();
+      const metricsResult = await backend.getMetrics();
 
       setCountryData({
         labels: countryResult.map(([label, _]) => label),
@@ -41,6 +48,8 @@ const App: React.FC = () => {
         labels: emailResult.map(([label, _]) => label),
         data: emailResult.map(([_, value]) => Number(value)),
       });
+
+      setMetrics(metricsResult);
     };
 
     fetchData();
@@ -80,6 +89,7 @@ const App: React.FC = () => {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <KeyMetrics 
+              metrics={metrics}
               onNewLeadsClick={handleNewLeadsClick} 
               onEmailsClick={handleEmailsClick} 
               onProposalsClick={handleProposalsClick}

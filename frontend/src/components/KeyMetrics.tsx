@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, Paper, Typography, Button } from '@mui/material';
+import React from 'react';
+import { Grid, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { backend } from 'declarations/backend';
 
 const MetricPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -11,29 +10,19 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
 }));
 
 interface KeyMetricsProps {
+  metrics: {
+    newLeads: number;
+    emails: number;
+    proposals: number;
+    appointments: number;
+  };
   onNewLeadsClick: () => void;
   onEmailsClick: () => void;
   onProposalsClick: () => void;
   onAppointmentsClick: () => void;
 }
 
-const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
-  const [metrics, setMetrics] = useState({
-    newLeads: 0,
-    emails: 0,
-    proposals: 0,
-    appointments: 0,
-  });
-
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      const result = await backend.getMetrics();
-      setMetrics(result);
-    };
-
-    fetchMetrics();
-  }, []);
-
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
