@@ -19,15 +19,18 @@ type Email = {
 const EmailsTable: React.FC = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEmails = async () => {
       try {
         setLoading(true);
+        setError(null);
         const result = await backend.getEmails();
         setEmails(result);
       } catch (error) {
         console.error('Error fetching emails:', error);
+        setError('Failed to fetch emails. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -38,6 +41,10 @@ const EmailsTable: React.FC = () => {
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (

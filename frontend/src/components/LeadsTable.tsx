@@ -24,15 +24,18 @@ interface LeadsTableProps {
 const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLeads = async () => {
       try {
         setLoading(true);
+        setError(null);
         const result = showOnlyNewLeads ? await backend.getNewLeads() : await backend.getLeads();
         setLeads(result);
       } catch (error) {
         console.error('Error fetching leads:', error);
+        setError('Failed to fetch leads. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -43,6 +46,10 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (

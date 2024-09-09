@@ -19,15 +19,18 @@ type Appointment = {
 const AppointmentsTable: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         setLoading(true);
+        setError(null);
         const result = await backend.getAppointments();
         setAppointments(result);
       } catch (error) {
         console.error('Error fetching appointments:', error);
+        setError('Failed to fetch appointments. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -38,6 +41,10 @@ const AppointmentsTable: React.FC = () => {
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (

@@ -11,10 +11,10 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
 
 interface KeyMetricsProps {
   metrics: {
-    newLeads: number | null;
-    emails: number | null;
-    proposals: number | null;
-    appointments: number | null;
+    newLeads: number;
+    emails: number;
+    proposals: number;
+    appointments: number;
   };
   loading: boolean;
   onNewLeadsClick: () => void;

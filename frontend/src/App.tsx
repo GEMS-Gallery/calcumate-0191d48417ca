@@ -27,17 +27,19 @@ const App: React.FC = () => {
   const [showProposals, setShowProposals] = useState(false);
   const [showAppointments, setShowAppointments] = useState(false);
   const [metrics, setMetrics] = useState<{
-    newLeads: number | null;
-    emails: number | null;
-    proposals: number | null;
-    appointments: number | null;
-  }>({ newLeads: null, emails: null, proposals: null, appointments: null });
+    newLeads: number;
+    emails: number;
+    proposals: number;
+    appointments: number;
+  }>({ newLeads: 0, emails: 0, proposals: 0, appointments: 0 });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [countryResult, emailResult, metricsResult] = await Promise.all([
           backend.getCountryData(),
           backend.getEmailData(),
@@ -57,6 +59,7 @@ const App: React.FC = () => {
         setMetrics(metricsResult);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError('Failed to fetch data. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -92,6 +95,10 @@ const App: React.FC = () => {
     setShowEmails(false);
     setShowProposals(false);
   };
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
     <Box sx={{ padding: 3, backgroundColor: 'background.default' }}>

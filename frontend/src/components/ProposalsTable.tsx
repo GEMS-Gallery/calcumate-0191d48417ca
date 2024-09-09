@@ -20,15 +20,18 @@ type Proposal = {
 const ProposalsTable: React.FC = () => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProposals = async () => {
       try {
         setLoading(true);
+        setError(null);
         const result = await backend.getProposals();
         setProposals(result);
       } catch (error) {
         console.error('Error fetching proposals:', error);
+        setError('Failed to fetch proposals. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -39,6 +42,10 @@ const ProposalsTable: React.FC = () => {
 
   if (loading) {
     return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
