@@ -1,120 +1,103 @@
-import React, { useState } from 'react';
-import { Button, Grid, Paper, TextField, CircularProgress } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid, Paper, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Doughnut } from 'react-chartjs-2';
 import { backend } from 'declarations/backend';
+import KeyMetrics from './components/KeyMetrics';
+import LeadsTable from './components/LeadsTable';
 
-const CalculatorPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
+const DashboardPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
   margin: 'auto',
-  maxWidth: 300,
+  maxWidth: 1200,
 }));
 
-const DisplayTextField = styled(TextField)({
-  '& .MuiInputBase-input': {
-    textAlign: 'right',
-    fontSize: '1.5rem',
-  },
+const ChartContainer = styled(Box)({
+  height: 300,
 });
 
 const App: React.FC = () => {
-  const [display, setDisplay] = useState('0');
-  const [firstOperand, setFirstOperand] = useState<number | null>(null);
-  const [operation, setOperation] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [countryData, setCountryData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
+  const [emailData, setEmailData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
 
-  const handleNumberClick = (num: string) => {
-    setDisplay(prev => (prev === '0' ? num : prev + num));
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const countryResult = await backend.getCountryData();
+      const emailResult = await backend.getEmailData();
 
-  const handleOperationClick = (op: string) => {
-    setFirstOperand(parseFloat(display));
-    setOperation(op);
-    setDisplay('0');
-  };
+      setCountryData({
+        labels: countryResult.map(([label, _]) => label),
+        data: countryResult.map(([_, value]) => Number(value)),
+      });
 
-  const handleClear = () => {
-    setDisplay('0');
-    setFirstOperand(null);
-    setOperation(null);
-  };
+      setEmailData({
+        labels: emailResult.map(([label, _]) => label),
+        data: emailResult.map(([_, value]) => Number(value)),
+      });
+    };
 
-  const handleEquals = async () => {
-    if (firstOperand !== null && operation) {
-      setLoading(true);
-      try {
-        const result = await backend.calculate(operation, firstOperand, parseFloat(display));
-        setDisplay(result.toString());
-      } catch (error) {
-        setDisplay('Error');
-      } finally {
-        setLoading(false);
-      }
-      setFirstOperand(null);
-      setOperation(null);
-    }
-  };
-
-  const buttons = [
-    '7', '8', '9', '/',
-    '4', '5', '6', '*',
-    '1', '2', '3', '-',
-    '0', '.', '=', '+'
-  ];
+    fetchData();
+  }, []);
 
   return (
-    <CalculatorPaper elevation={3}>
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <DisplayTextField
-            fullWidth
-            variant="outlined"
-            value={display}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        {buttons.map((btn) => (
-          <Grid item xs={3} key={btn}>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                if (btn === '=') handleEquals();
-                else if (['+', '-', '*', '/'].includes(btn)) handleOperationClick(btn);
-                else handleNumberClick(btn);
-              }}
-              disabled={loading}
-            >
-              {btn}
-            </Button>
+    <Box sx={{ padding: 3, backgroundColor: 'background.default' }}>
+      <DashboardPaper elevation={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <KeyMetrics />
           </Grid>
-        ))}
-        <Grid item xs={12}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            onClick={handleClear}
-            disabled={loading}
-          >
-            Clear
-          </Button>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h6" gutterBottom>Lead by Countries</Typography>
+            <ChartContainer>
+              <Doughnut
+                data={{
+                  labels: countryData.labels,
+                  datasets: [{
+                    data: countryData.data,
+                    backgroundColor: ['#635bff', '#32325d', '#3ecf8e', '#f6bc13', '#ed5f74', '#6772e5'],
+                  }],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom' as const,
+                    },
+                  },
+                }}
+              />
+            </ChartContainer>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h6" gutterBottom>Email Sent</Typography>
+            <ChartContainer>
+              <Doughnut
+                data={{
+                  labels: emailData.labels,
+                  datasets: [{
+                    data: emailData.data,
+                    backgroundColor: ['#635bff', '#e3e8ee'],
+                  }],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom' as const,
+                    },
+                  },
+                }}
+              />
+            </ChartContainer>
+          </Grid>
+          <Grid item xs={12}>
+            <LeadsTable />
+          </Grid>
         </Grid>
-      </Grid>
-      {loading && (
-        <CircularProgress
-          size={24}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: '-12px',
-            marginLeft: '-12px',
-          }}
-        />
-      )}
-    </CalculatorPaper>
+      </DashboardPaper>
+    </Box>
   );
 };
 

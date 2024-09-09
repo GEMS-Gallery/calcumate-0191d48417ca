@@ -1,3 +1,27 @@
+type Lead = 
+ record {
+   assignee: text;
+   createdTime: text;
+   email: text;
+   name: text;
+   status: text;
+ };
 service : {
-  calculate: (text, float64, float64) -> (float64);
+  addLead: (text, text, text, text, text) -> ();
+  getCountryData: () -> (vec record {
+                               text;
+                               float64;
+                             }) query;
+  getEmailData: () -> (vec record {
+                             text;
+                             float64;
+                           }) query;
+  getLeads: () -> (vec Lead) query;
+  getMetrics: () ->
+   (record {
+      appointments: nat;
+      emails: nat;
+      newLeads: nat;
+      proposals: nat;
+    }) query;
 }

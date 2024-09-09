@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2196F3',
+      main: '#635bff',
     },
-    secondary: {
-      main: '#FFC107',
+    background: {
+      default: '#f7fafc',
+    },
+    text: {
+      primary: '#1a1f36',
     },
   },
 });
