@@ -57,6 +57,7 @@ const App: React.FC = () => {
         });
 
         setMetrics(metricsResult);
+        console.log('Fetched metrics:', metricsResult);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('Failed to fetch data. Please try again.');
@@ -67,6 +68,10 @@ const App: React.FC = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log('Current metrics state:', metrics);
+  }, [metrics]);
 
   const handleNewLeadsClick = () => {
     setShowOnlyNewLeads(!showOnlyNewLeads);

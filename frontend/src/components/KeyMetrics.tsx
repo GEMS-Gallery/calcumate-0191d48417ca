@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Paper, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -24,6 +24,10 @@ interface KeyMetricsProps {
 }
 
 const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, loading, onNewLeadsClick, onEmailsClick, onProposalsClick, onAppointmentsClick }) => {
+  useEffect(() => {
+    console.log('KeyMetrics received metrics:', metrics);
+  }, [metrics]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>

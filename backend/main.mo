@@ -165,12 +165,14 @@ actor CRM {
     proposals: Nat;
     appointments: Nat;
   } {
-    {
+    let metrics = {
       newLeads = Array.size(Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" }));
       emails = Array.size(emails);
       proposals = Array.size(proposals);
       appointments = Array.size(appointments);
-    }
+    };
+    Debug.print("Metrics: " # debug_show(metrics));
+    metrics
   };
 
   public query func getCountryData() : async [(Text, Float)] {
