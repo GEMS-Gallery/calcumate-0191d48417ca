@@ -15,7 +15,29 @@ actor CRM {
     assignee: Text;
   };
 
-  var leads : [Lead] = [];
+  var leads : [Lead] = [
+    {
+      name = "Eileen Horton";
+      status = "New";
+      email = "eileen_h@hotmail.com";
+      createdTime = "11/06/2021 09:53";
+      assignee = "Carrie Harris";
+    },
+    {
+      name = "Terrance Moreno";
+      status = "Sold";
+      email = "terrance_moreno@infotech.io";
+      createdTime = "23/09/2021 03:40";
+      assignee = "Toni Lane";
+    },
+    {
+      name = "Ron Vargas";
+      status = "Sold";
+      email = "ronnie_vergas@infotech.io";
+      createdTime = "23/09/2021 03:40";
+      assignee = "Joanne Mendoza";
+    }
+  ];
 
   public func addLead(name: Text, status: Text, email: Text, createdTime: Text, assignee: Text) : async () {
     let newLead : Lead = {

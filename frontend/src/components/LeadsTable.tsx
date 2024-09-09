@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Avatar, Chip, Link } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Avatar, Chip, Link, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -19,15 +19,26 @@ type Lead = {
 
 const LeadsTable: React.FC = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLeads = async () => {
-      const result = await backend.getLeads();
-      setLeads(result);
+      try {
+        const result = await backend.getLeads();
+        setLeads(result);
+      } catch (error) {
+        console.error('Error fetching leads:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchLeads();
   }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -47,7 +58,7 @@ const LeadsTable: React.FC = () => {
             <TableRow key={index}>
               <TableCell>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar src={`/api/placeholder/32/32`} alt={lead.name} sx={{ mr: 1 }} />
+                  <Avatar src={`https://i.pravatar.cc/32?u=${lead.email}`} alt={lead.name} sx={{ mr: 1 }} />
                   {lead.name}
                 </div>
               </TableCell>
