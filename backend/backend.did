@@ -24,4 +24,5 @@ service : {
       newLeads: nat;
       proposals: nat;
     }) query;
+  getNewLeads: () -> (vec Lead) query;
 }

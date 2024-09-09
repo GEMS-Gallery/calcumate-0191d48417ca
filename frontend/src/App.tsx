@@ -19,6 +19,7 @@ const ChartContainer = styled(Box)({
 const App: React.FC = () => {
   const [countryData, setCountryData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
   const [emailData, setEmailData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
+  const [showOnlyNewLeads, setShowOnlyNewLeads] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,12 +40,16 @@ const App: React.FC = () => {
     fetchData();
   }, []);
 
+  const handleNewLeadsClick = () => {
+    setShowOnlyNewLeads(!showOnlyNewLeads);
+  };
+
   return (
     <Box sx={{ padding: 3, backgroundColor: 'background.default' }}>
       <DashboardPaper elevation={3}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <KeyMetrics />
+            <KeyMetrics onNewLeadsClick={handleNewLeadsClick} />
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="h6" gutterBottom>Lead by Countries</Typography>
@@ -93,7 +98,7 @@ const App: React.FC = () => {
             </ChartContainer>
           </Grid>
           <Grid item xs={12}>
-            <LeadsTable />
+            <LeadsTable showOnlyNewLeads={showOnlyNewLeads} />
           </Grid>
         </Grid>
       </DashboardPaper>

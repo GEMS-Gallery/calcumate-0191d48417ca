@@ -17,14 +17,19 @@ type Lead = {
   assignee: string;
 };
 
-const LeadsTable: React.FC = () => {
+interface LeadsTableProps {
+  showOnlyNewLeads: boolean;
+}
+
+const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const result = await backend.getLeads();
+        setLoading(true);
+        const result = showOnlyNewLeads ? await backend.getNewLeads() : await backend.getLeads();
         setLeads(result);
       } catch (error) {
         console.error('Error fetching leads:', error);
@@ -34,7 +39,7 @@ const LeadsTable: React.FC = () => {
     };
 
     fetchLeads();
-  }, []);
+  }, [showOnlyNewLeads]);
 
   if (loading) {
     return <CircularProgress />;
@@ -42,7 +47,9 @@ const LeadsTable: React.FC = () => {
 
   return (
     <TableContainer component={Paper}>
-      <Typography variant="h6" gutterBottom sx={{ p: 2 }}>Leads</Typography>
+      <Typography variant="h6" gutterBottom sx={{ p: 2 }}>
+        {showOnlyNewLeads ? 'New Leads' : 'All Leads'}
+      </Typography>
       <Table>
         <TableHead>
           <TableRow>

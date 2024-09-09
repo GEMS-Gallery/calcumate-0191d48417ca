@@ -35,6 +35,7 @@ export const idlFactory = ({ IDL }) => {
         ],
         ['query'],
       ),
+    'getNewLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };

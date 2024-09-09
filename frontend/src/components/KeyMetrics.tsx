@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -7,9 +7,14 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   textAlign: 'center',
   backgroundColor: theme.palette.background.default,
+  cursor: 'pointer',
 }));
 
-const KeyMetrics: React.FC = () => {
+interface KeyMetricsProps {
+  onNewLeadsClick: () => void;
+}
+
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick }) => {
   const [metrics, setMetrics] = useState({
     newLeads: 0,
     emails: 0,
@@ -32,7 +37,7 @@ const KeyMetrics: React.FC = () => {
         <Typography variant="h6" gutterBottom>Key Metrics</Typography>
       </Grid>
       <Grid item xs={6} sm={3}>
-        <MetricPaper>
+        <MetricPaper onClick={onNewLeadsClick}>
           <Typography variant="h4" color="primary">{metrics.newLeads}</Typography>
           <Typography variant="body2">New Leads</Typography>
         </MetricPaper>

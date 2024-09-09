@@ -1,3 +1,4 @@
+import Bool "mo:base/Bool";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
 
@@ -54,6 +55,10 @@ actor CRM {
     leads
   };
 
+  public query func getNewLeads() : async [Lead] {
+    Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" })
+  };
+
   public query func getMetrics() : async {
     newLeads: Nat;
     emails: Nat;
@@ -61,7 +66,7 @@ actor CRM {
     appointments: Nat;
   } {
     {
-      newLeads = 63;
+      newLeads = Array.size(Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" }));
       emails = 25;
       proposals = 49;
       appointments = 12;
