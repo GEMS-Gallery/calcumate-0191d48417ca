@@ -1,0 +1,121 @@
+import React, { useState } from 'react';
+import { Button, Grid, Paper, TextField, CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { backend } from 'declarations/backend';
+
+const CalculatorPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  margin: 'auto',
+  maxWidth: 300,
+}));
+
+const DisplayTextField = styled(TextField)({
+  '& .MuiInputBase-input': {
+    textAlign: 'right',
+    fontSize: '1.5rem',
+  },
+});
+
+const App: React.FC = () => {
+  const [display, setDisplay] = useState('0');
+  const [firstOperand, setFirstOperand] = useState<number | null>(null);
+  const [operation, setOperation] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleNumberClick = (num: string) => {
+    setDisplay(prev => (prev === '0' ? num : prev + num));
+  };
+
+  const handleOperationClick = (op: string) => {
+    setFirstOperand(parseFloat(display));
+    setOperation(op);
+    setDisplay('0');
+  };
+
+  const handleClear = () => {
+    setDisplay('0');
+    setFirstOperand(null);
+    setOperation(null);
+  };
+
+  const handleEquals = async () => {
+    if (firstOperand !== null && operation) {
+      setLoading(true);
+      try {
+        const result = await backend.calculate(operation, firstOperand, parseFloat(display));
+        setDisplay(result.toString());
+      } catch (error) {
+        setDisplay('Error');
+      } finally {
+        setLoading(false);
+      }
+      setFirstOperand(null);
+      setOperation(null);
+    }
+  };
+
+  const buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '=', '+'
+  ];
+
+  return (
+    <CalculatorPaper elevation={3}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <DisplayTextField
+            fullWidth
+            variant="outlined"
+            value={display}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Grid>
+        {buttons.map((btn) => (
+          <Grid item xs={3} key={btn}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => {
+                if (btn === '=') handleEquals();
+                else if (['+', '-', '*', '/'].includes(btn)) handleOperationClick(btn);
+                else handleNumberClick(btn);
+              }}
+              disabled={loading}
+            >
+              {btn}
+            </Button>
+          </Grid>
+        ))}
+        <Grid item xs={12}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+            onClick={handleClear}
+            disabled={loading}
+          >
+            Clear
+          </Button>
+        </Grid>
+      </Grid>
+      {loading && (
+        <CircularProgress
+          size={24}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-12px',
+            marginLeft: '-12px',
+          }}
+        />
+      )}
+    </CalculatorPaper>
+  );
+};
+
+export default App;
