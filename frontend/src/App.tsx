@@ -56,7 +56,12 @@ const App: React.FC = () => {
           data: emailResult.map(([_, value]) => Number(value)),
         });
 
-        setMetrics(metricsResult);
+        setMetrics({
+          newLeads: Number(metricsResult.newLeads),
+          emails: Number(metricsResult.emails),
+          proposals: Number(metricsResult.proposals),
+          appointments: Number(metricsResult.appointments),
+        });
         console.log('Fetched metrics:', metricsResult);
       } catch (error) {
         console.error('Error fetching data:', error);
