@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Link, CircularProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Link, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -18,8 +18,10 @@ type Appointment = {
 
 const AppointmentsTable: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -55,8 +57,8 @@ const [loading, setLoading] = useState(true);
           <TableRow>
             <StyledTableCell>Client Name</StyledTableCell>
             <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>Time</StyledTableCell>
-            <StyledTableCell>Purpose</StyledTableCell>
+            {!isMobile && <StyledTableCell>Time</StyledTableCell>}
+            {!isMobile && <StyledTableCell>Purpose</StyledTableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -64,8 +66,8 @@ const [loading, setLoading] = useState(true);
             <TableRow key={index}>
               <TableCell>{appointment.clientName}</TableCell>
               <TableCell>{appointment.date}</TableCell>
-              <TableCell>{appointment.time}</TableCell>
-              <TableCell>{appointment.purpose}</TableCell>
+              {!isMobile && <TableCell>{appointment.time}</TableCell>}
+              {!isMobile && <TableCell>{appointment.purpose}</TableCell>}
             </TableRow>
           ))}
         </TableBody>

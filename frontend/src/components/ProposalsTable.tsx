@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip, Link, CircularProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip, Link, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -21,6 +21,8 @@ const ProposalsTable: React.FC = () => {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchProposals = async () => {
@@ -55,9 +57,9 @@ const ProposalsTable: React.FC = () => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Client Name</StyledTableCell>
-            <StyledTableCell>Project Name</StyledTableCell>
+            {!isMobile && <StyledTableCell>Project Name</StyledTableCell>}
             <StyledTableCell>Value</StyledTableCell>
-            <StyledTableCell>Submission Date</StyledTableCell>
+            {!isMobile && <StyledTableCell>Submission Date</StyledTableCell>}
             <StyledTableCell>Status</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -65,9 +67,9 @@ const ProposalsTable: React.FC = () => {
           {proposals.map((proposal, index) => (
             <TableRow key={index}>
               <TableCell>{proposal.clientName}</TableCell>
-              <TableCell>{proposal.projectName}</TableCell>
+              {!isMobile && <TableCell>{proposal.projectName}</TableCell>}
               <TableCell>${proposal.value.toLocaleString()}</TableCell>
-              <TableCell>{proposal.submissionDate}</TableCell>
+              {!isMobile && <TableCell>{proposal.submissionDate}</TableCell>}
               <TableCell>
                 <Chip
                   label={proposal.status}

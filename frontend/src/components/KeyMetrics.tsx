@@ -7,6 +7,9 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   backgroundColor: theme.palette.background.default,
   cursor: 'pointer',
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(1),
+  },
 }));
 
 interface KeyMetricsProps {

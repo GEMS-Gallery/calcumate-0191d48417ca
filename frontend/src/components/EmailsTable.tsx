@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip, Link, CircularProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip, Link, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -20,6 +20,8 @@ const EmailsTable: React.FC = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -54,7 +56,7 @@ const EmailsTable: React.FC = () => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Recipient</StyledTableCell>
-            <StyledTableCell>Subject</StyledTableCell>
+            {!isMobile && <StyledTableCell>Subject</StyledTableCell>}
             <StyledTableCell>Sent Time</StyledTableCell>
             <StyledTableCell>Status</StyledTableCell>
           </TableRow>
@@ -63,7 +65,7 @@ const EmailsTable: React.FC = () => {
           {emails.map((email, index) => (
             <TableRow key={index}>
               <TableCell>{email.recipient}</TableCell>
-              <TableCell>{email.subject}</TableCell>
+              {!isMobile && <TableCell>{email.subject}</TableCell>}
               <TableCell>{email.sentTime}</TableCell>
               <TableCell>
                 <Chip

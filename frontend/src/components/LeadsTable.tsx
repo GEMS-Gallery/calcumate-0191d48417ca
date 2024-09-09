@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Avatar, Chip, Link, CircularProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Avatar, Chip, Link, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { backend } from 'declarations/backend';
 
@@ -25,6 +25,8 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -62,9 +64,13 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
           <TableRow>
             <StyledTableCell>Name</StyledTableCell>
             <StyledTableCell>Status</StyledTableCell>
-            <StyledTableCell>Email</StyledTableCell>
-            <StyledTableCell>Created Time</StyledTableCell>
-            <StyledTableCell>Assignee</StyledTableCell>
+            {!isMobile && (
+              <>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Created Time</StyledTableCell>
+                <StyledTableCell>Assignee</StyledTableCell>
+              </>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -83,9 +89,13 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ showOnlyNewLeads }) => {
                   size="small"
                 />
               </TableCell>
-              <TableCell>{lead.email}</TableCell>
-              <TableCell>{lead.createdTime}</TableCell>
-              <TableCell>{lead.assignee}</TableCell>
+              {!isMobile && (
+                <>
+                  <TableCell>{lead.email}</TableCell>
+                  <TableCell>{lead.createdTime}</TableCell>
+                  <TableCell>{lead.assignee}</TableCell>
+                </>
+              )}
             </TableRow>
           ))}
         </TableBody>
