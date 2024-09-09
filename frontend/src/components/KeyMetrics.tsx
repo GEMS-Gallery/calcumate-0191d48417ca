@@ -12,9 +12,10 @@ const MetricPaper = styled(Paper)(({ theme }) => ({
 
 interface KeyMetricsProps {
   onNewLeadsClick: () => void;
+  onEmailsClick: () => void;
 }
 
-const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick }) => {
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick, onEmailsClick }) => {
   const [metrics, setMetrics] = useState({
     newLeads: 0,
     emails: 0,
@@ -43,7 +44,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ onNewLeadsClick }) => {
         </MetricPaper>
       </Grid>
       <Grid item xs={6} sm={3}>
-        <MetricPaper>
+        <MetricPaper onClick={onEmailsClick}>
           <Typography variant="h4" color="primary">{metrics.emails}</Typography>
           <Typography variant="body2">Emails</Typography>
         </MetricPaper>

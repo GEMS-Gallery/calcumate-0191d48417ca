@@ -5,6 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { backend } from 'declarations/backend';
 import KeyMetrics from './components/KeyMetrics';
 import LeadsTable from './components/LeadsTable';
+import EmailsTable from './components/EmailsTable';
 
 const DashboardPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -20,6 +21,7 @@ const App: React.FC = () => {
   const [countryData, setCountryData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
   const [emailData, setEmailData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
   const [showOnlyNewLeads, setShowOnlyNewLeads] = useState(false);
+  const [showEmails, setShowEmails] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,12 @@ const App: React.FC = () => {
 
   const handleNewLeadsClick = () => {
     setShowOnlyNewLeads(!showOnlyNewLeads);
+    setShowEmails(false);
+  };
+
+  const handleEmailsClick = () => {
+    setShowEmails(!showEmails);
+    setShowOnlyNewLeads(false);
   };
 
   return (
@@ -49,7 +57,7 @@ const App: React.FC = () => {
       <DashboardPaper elevation={3}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <KeyMetrics onNewLeadsClick={handleNewLeadsClick} />
+            <KeyMetrics onNewLeadsClick={handleNewLeadsClick} onEmailsClick={handleEmailsClick} />
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="h6" gutterBottom>Lead by Countries</Typography>
@@ -98,7 +106,11 @@ const App: React.FC = () => {
             </ChartContainer>
           </Grid>
           <Grid item xs={12}>
-            <LeadsTable showOnlyNewLeads={showOnlyNewLeads} />
+            {showEmails ? (
+              <EmailsTable />
+            ) : (
+              <LeadsTable showOnlyNewLeads={showOnlyNewLeads} />
+            )}
           </Grid>
         </Grid>
       </DashboardPaper>

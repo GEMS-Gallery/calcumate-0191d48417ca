@@ -2,6 +2,12 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
+export interface Email {
+  'status' : string,
+  'sentTime' : string,
+  'subject' : string,
+  'recipient' : string,
+}
 export interface Lead {
   'status' : string,
   'assignee' : string,
@@ -13,6 +19,7 @@ export interface _SERVICE {
   'addLead' : ActorMethod<[string, string, string, string, string], undefined>,
   'getCountryData' : ActorMethod<[], Array<[string, number]>>,
   'getEmailData' : ActorMethod<[], Array<[string, number]>>,
+  'getEmails' : ActorMethod<[], Array<Email>>,
   'getLeads' : ActorMethod<[], Array<Lead>>,
   'getMetrics' : ActorMethod<
     [],

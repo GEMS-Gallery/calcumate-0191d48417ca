@@ -16,6 +16,13 @@ actor CRM {
     assignee: Text;
   };
 
+  type Email = {
+    recipient: Text;
+    subject: Text;
+    sentTime: Text;
+    status: Text;
+  };
+
   var leads : [Lead] = [
     {
       name = "Eileen Horton";
@@ -40,6 +47,27 @@ actor CRM {
     }
   ];
 
+  var emails : [Email] = [
+    {
+      recipient = "eileen_h@hotmail.com";
+      subject = "Welcome to Our Service";
+      sentTime = "12/06/2021 10:00";
+      status = "Delivered";
+    },
+    {
+      recipient = "terrance_moreno@infotech.io";
+      subject = "Your Recent Purchase";
+      sentTime = "24/09/2021 14:30";
+      status = "Opened";
+    },
+    {
+      recipient = "ronnie_vergas@infotech.io";
+      subject = "Feedback Request";
+      sentTime = "25/09/2021 09:15";
+      status = "Sent";
+    }
+  ];
+
   public func addLead(name: Text, status: Text, email: Text, createdTime: Text, assignee: Text) : async () {
     let newLead : Lead = {
       name = name;
@@ -59,6 +87,10 @@ actor CRM {
     Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" })
   };
 
+  public query func getEmails() : async [Email] {
+    emails
+  };
+
   public query func getMetrics() : async {
     newLeads: Nat;
     emails: Nat;
@@ -67,7 +99,7 @@ actor CRM {
   } {
     {
       newLeads = Array.size(Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" }));
-      emails = 25;
+      emails = Array.size(emails);
       proposals = 49;
       appointments = 12;
     }

@@ -6,6 +6,13 @@ type Lead =
    name: text;
    status: text;
  };
+type Email = 
+ record {
+   recipient: text;
+   sentTime: text;
+   status: text;
+   subject: text;
+ };
 service : {
   addLead: (text, text, text, text, text) -> ();
   getCountryData: () -> (vec record {
@@ -16,6 +23,7 @@ service : {
                              text;
                              float64;
                            }) query;
+  getEmails: () -> (vec Email) query;
   getLeads: () -> (vec Lead) query;
   getMetrics: () ->
    (record {

@@ -1,4 +1,10 @@
 export const idlFactory = ({ IDL }) => {
+  const Email = IDL.Record({
+    'status' : IDL.Text,
+    'sentTime' : IDL.Text,
+    'subject' : IDL.Text,
+    'recipient' : IDL.Text,
+  });
   const Lead = IDL.Record({
     'status' : IDL.Text,
     'assignee' : IDL.Text,
@@ -22,6 +28,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Float64))],
         ['query'],
       ),
+    'getEmails' : IDL.Func([], [IDL.Vec(Email)], ['query']),
     'getLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
     'getMetrics' : IDL.Func(
         [],
