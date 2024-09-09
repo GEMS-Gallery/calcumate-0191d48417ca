@@ -6,6 +6,7 @@ import { backend } from 'declarations/backend';
 import KeyMetrics from './components/KeyMetrics';
 import LeadsTable from './components/LeadsTable';
 import EmailsTable from './components/EmailsTable';
+import ProposalsTable from './components/ProposalsTable';
 
 const DashboardPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -22,6 +23,7 @@ const App: React.FC = () => {
   const [emailData, setEmailData] = useState<{ labels: string[], data: number[] }>({ labels: [], data: [] });
   const [showOnlyNewLeads, setShowOnlyNewLeads] = useState(false);
   const [showEmails, setShowEmails] = useState(false);
+  const [showProposals, setShowProposals] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,11 +47,19 @@ const App: React.FC = () => {
   const handleNewLeadsClick = () => {
     setShowOnlyNewLeads(!showOnlyNewLeads);
     setShowEmails(false);
+    setShowProposals(false);
   };
 
   const handleEmailsClick = () => {
     setShowEmails(!showEmails);
     setShowOnlyNewLeads(false);
+    setShowProposals(false);
+  };
+
+  const handleProposalsClick = () => {
+    setShowProposals(!showProposals);
+    setShowOnlyNewLeads(false);
+    setShowEmails(false);
   };
 
   return (
@@ -57,7 +67,11 @@ const App: React.FC = () => {
       <DashboardPaper elevation={3}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <KeyMetrics onNewLeadsClick={handleNewLeadsClick} onEmailsClick={handleEmailsClick} />
+            <KeyMetrics 
+              onNewLeadsClick={handleNewLeadsClick} 
+              onEmailsClick={handleEmailsClick} 
+              onProposalsClick={handleProposalsClick}
+            />
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="h6" gutterBottom>Lead by Countries</Typography>
@@ -108,6 +122,8 @@ const App: React.FC = () => {
           <Grid item xs={12}>
             {showEmails ? (
               <EmailsTable />
+            ) : showProposals ? (
+              <ProposalsTable />
             ) : (
               <LeadsTable showOnlyNewLeads={showOnlyNewLeads} />
             )}

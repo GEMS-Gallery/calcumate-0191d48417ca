@@ -23,6 +23,14 @@ actor CRM {
     status: Text;
   };
 
+  type Proposal = {
+    clientName: Text;
+    projectName: Text;
+    value: Float;
+    submissionDate: Text;
+    status: Text;
+  };
+
   var leads : [Lead] = [
     {
       name = "Eileen Horton";
@@ -68,6 +76,30 @@ actor CRM {
     }
   ];
 
+  var proposals : [Proposal] = [
+    {
+      clientName = "ABC Corp";
+      projectName = "Website Redesign";
+      value = 15000.00;
+      submissionDate = "15/06/2021";
+      status = "Pending";
+    },
+    {
+      clientName = "XYZ Inc";
+      projectName = "Mobile App Development";
+      value = 50000.00;
+      submissionDate = "22/09/2021";
+      status = "Accepted";
+    },
+    {
+      clientName = "123 Industries";
+      projectName = "Cloud Migration";
+      value = 100000.00;
+      submissionDate = "30/09/2021";
+      status = "In Review";
+    }
+  ];
+
   public func addLead(name: Text, status: Text, email: Text, createdTime: Text, assignee: Text) : async () {
     let newLead : Lead = {
       name = name;
@@ -91,6 +123,10 @@ actor CRM {
     emails
   };
 
+  public query func getProposals() : async [Proposal] {
+    proposals
+  };
+
   public query func getMetrics() : async {
     newLeads: Nat;
     emails: Nat;
@@ -100,7 +136,7 @@ actor CRM {
     {
       newLeads = Array.size(Array.filter(leads, func (lead: Lead) : Bool { lead.status == "New" }));
       emails = Array.size(emails);
-      proposals = 49;
+      proposals = Array.size(proposals);
       appointments = 12;
     }
   };

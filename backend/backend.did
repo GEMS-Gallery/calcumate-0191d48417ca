@@ -1,3 +1,11 @@
+type Proposal = 
+ record {
+   clientName: text;
+   projectName: text;
+   status: text;
+   submissionDate: text;
+   value: float64;
+ };
 type Lead = 
  record {
    assignee: text;
@@ -33,4 +41,5 @@ service : {
       proposals: nat;
     }) query;
   getNewLeads: () -> (vec Lead) query;
+  getProposals: () -> (vec Proposal) query;
 }

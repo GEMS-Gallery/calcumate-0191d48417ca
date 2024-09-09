@@ -15,6 +15,13 @@ export interface Lead {
   'createdTime' : string,
   'email' : string,
 }
+export interface Proposal {
+  'status' : string,
+  'projectName' : string,
+  'value' : number,
+  'clientName' : string,
+  'submissionDate' : string,
+}
 export interface _SERVICE {
   'addLead' : ActorMethod<[string, string, string, string, string], undefined>,
   'getCountryData' : ActorMethod<[], Array<[string, number]>>,
@@ -31,6 +38,7 @@ export interface _SERVICE {
     }
   >,
   'getNewLeads' : ActorMethod<[], Array<Lead>>,
+  'getProposals' : ActorMethod<[], Array<Proposal>>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

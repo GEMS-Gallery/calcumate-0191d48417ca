@@ -12,6 +12,13 @@ export const idlFactory = ({ IDL }) => {
     'createdTime' : IDL.Text,
     'email' : IDL.Text,
   });
+  const Proposal = IDL.Record({
+    'status' : IDL.Text,
+    'projectName' : IDL.Text,
+    'value' : IDL.Float64,
+    'clientName' : IDL.Text,
+    'submissionDate' : IDL.Text,
+  });
   return IDL.Service({
     'addLead' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
@@ -43,6 +50,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getNewLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
+    'getProposals' : IDL.Func([], [IDL.Vec(Proposal)], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };
